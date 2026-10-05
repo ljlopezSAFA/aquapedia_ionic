@@ -1,27 +1,13 @@
-#container {
+
+.bienvenida {
+  height: 100%;
+  display: flex;
+  flex-direction: column; // uno debajo de otro
+  align-items: center; // centrado horizontal
+  justify-content: center; // centrado vertical
   text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
 }
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
+ion-icon {
+  font-size: 64px; // los iconos se agrandan con font-size
+  color: white;
 }
