@@ -1,0 +1,77 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="sobre-foto">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/especies" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button class="redondo" [class.favorita]="especie?.favorita" aria-label="Marcar como favorita">
+        <ion-icon slot="icon-only" [name]="especie?.favorita ? 'heart' : 'heart-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (especie; as e) {
+
+    <div class="hero">
+      @if (!sinFoto) {
+        <img [src]="e.foto" [alt]="e.nombreComun" (error)="sinFoto = true" />
+      }
+    </div>
+
+    <div class="hoja">
+      <p class="tipo">{{ textosTipo[e.tipo] }} · {{ e.familia }}</p>
+      <h1>{{ e.nombreComun }}</h1>
+      <p class="cientifico">{{ e.nombreCientifico }}</p>
+
+      <div class="etiquetas">
+        <app-chip-dificultad [dificultad]="e.dificultad" />
+        <span class="etiqueta">{{ textosAgua[e.agua] }}</span>
+        @if (e.cardumen) { <span class="etiqueta">Vive en grupo</span> }
+      </div>
+
+      <div class="datos-clave">
+        <div><ion-icon name="thermometer-outline"></ion-icon><strong>{{ e.temperatura.min }}–{{ e.temperatura.max }}°</strong><span>Temperatura</span></div>
+        <div><ion-icon name="flask-outline"></ion-icon><strong>{{ e.ph.min }}–{{ e.ph.max }}</strong><span>pH</span></div>
+        <div><ion-icon name="resize-outline"></ion-icon><strong>{{ e.tamanoCm ?? '—' }} cm</strong><span>Tamaño</span></div>
+      </div>
+
+      <ion-segment [(ngModel)]="seccion">
+        <ion-segment-button value="agua"><ion-label>Agua</ion-label></ion-segment-button>
+        <ion-segment-button value="ficha"><ion-label>Ficha</ion-label></ion-segment-button>
+        <ion-segment-button value="convivencia"><ion-label>Convivencia</ion-label></ion-segment-button>
+      </ion-segment>
+
+      <div class="seccion">
+        @switch (seccion) {
+          @case ('agua') {
+            <app-barra-rango etiqueta="Temperatura" icono="thermometer-outline" unidad="°C"
+              [min]="e.temperatura.min" [max]="e.temperatura.max" [escalaMin]="14" [escalaMax]="32" />
+            <app-barra-rango etiqueta="pH" icono="flask-outline"
+              [min]="e.ph.min" [max]="e.ph.max" [escalaMin]="4" [escalaMax]="9" />
+            <app-barra-rango etiqueta="Dureza general" icono="water-outline" unidad="°dGH"
+              [min]="e.gh.min" [max]="e.gh.max" [escalaMin]="0" [escalaMax]="30" />
+          }
+          @case ('ficha') {
+            <p class="descripcion">{{ e.descripcion }}</p>
+            <ion-list [inset]="true" class="sin-margen">
+              <ion-item><ion-label>Familia</ion-label><ion-note slot="end">{{ e.familia }}</ion-note></ion-item>
+              <ion-item><ion-label>Tipo</ion-label><ion-note slot="end">{{ textosTipo[e.tipo] }}</ion-note></ion-item>
+              <ion-item><ion-label>Agua</ion-label><ion-note slot="end">{{ textosAgua[e.agua] }}</ion-note></ion-item>
+              <ion-item><ion-label>Vive en grupo</ion-label><ion-note slot="end">{{ e.cardumen ? 'Sí' : 'No' }}</ion-note></ion-item>
+            </ion-list>
+          }
+          @case ('convivencia') {
+            <app-estado-vacio icono="fish-outline" titulo="Próximamente"
+                              texto="Aquí verás con qué especies puede convivir." />
+          }
+        }
+      </div>
+    </div>
+
+  } @else {
+    <app-estado-vacio icono="fish-outline" titulo="Especie no encontrada"
+                      texto="Puede que la ficha se haya retirado de la enciclopedia." />
+  }
+</ion-content>

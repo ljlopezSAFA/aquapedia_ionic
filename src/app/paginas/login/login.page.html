@@ -1,0 +1,42 @@
+<ion-content [fullscreen]="true" class="login">
+
+  <!-- Zona 1: foto (o degradado de marca si no hay foto) con el logo encima -->
+  <div class="portada">
+    @if (!sinFoto) {
+      <img src="../../../assets/fotos/login.jpg" alt="" (error)="sinFoto = true" />
+    }
+    <div class="marca-portada">
+      <app-marca variante="blanco" tamano="l" [lema]="true" />
+    </div>
+  </div>
+
+  <!-- Zona 2: hoja con el formulario -->
+  <div class="hoja">
+    <h1>Bienvenido</h1>
+    <p class="subtitulo">Inicia sesión para cuidar de tus acuarios</p>
+
+    <ion-input class="campo" mode="md" fill="outline" label="Correo electrónico" labelPlacement="floating"
+               type="email" autocomplete="email">
+      <ion-icon slot="start" name="mail-outline" aria-hidden="true"></ion-icon>
+    </ion-input>
+
+    <ion-input class="campo" mode="md" fill="outline" label="Contraseña" labelPlacement="floating"
+               type="password" autocomplete="current-password">
+      <ion-icon slot="start" name="lock-closed-outline" aria-hidden="true"></ion-icon>
+      <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+    </ion-input>
+
+    <a class="olvido">¿Olvidaste la contraseña?</a>
+
+    <ion-button expand="block" routerLink="/app/especies" routerDirection="root">Entrar</ion-button>
+
+    <div class="separador"><span>o</span></div>
+
+    <ion-button expand="block" fill="outline" routerLink="/app/especies" routerDirection="root">
+      Explorar la enciclopedia sin cuenta
+    </ion-button>
+
+    <p class="registro">¿Aún no tienes cuenta? <a>Regístrate</a></p>
+  </div>
+
+</ion-content>

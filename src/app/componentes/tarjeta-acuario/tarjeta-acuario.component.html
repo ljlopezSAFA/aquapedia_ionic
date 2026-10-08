@@ -1,0 +1,28 @@
+<ion-card [routerLink]="['/app/acuarios', acuario().id]" [button]="true">
+  <div class="foto">
+    @if (!sinFoto) {
+      <img [src]="acuario().foto" [alt]="acuario().nombre" loading="lazy" (error)="sinFoto = true" />
+    } @else {
+      <ion-icon class="sin-foto" name="water-outline"></ion-icon>
+    }
+
+    @if (acuario().avisos.length > 0) {
+      <span class="estado aviso"><ion-icon name="warning-outline"></ion-icon>{{ acuario().avisos.length }} avisos</span>
+    } @else {
+      <span class="estado ok"><ion-icon name="checkmark-circle-outline"></ion-icon>Todo en orden</span>
+    }
+  </div>
+
+  <div class="cuerpo">
+    <h3>{{ acuario().nombre }}</h3>
+    <p>{{ acuario().litros }} L · {{ acuario().habitantes.length }} especies</p>
+
+    @if (acuario().mediciones[0]; as m) {
+      <div class="metricas">
+        <div><strong>{{ m.temperatura }}°</strong><span>Temperatura</span></div>
+        <div><strong>{{ m.ph }}</strong><span>pH</span></div>
+        <div [class.mal]="m.nitritos > 0"><strong>{{ m.nitritos }}</strong><span>Nitritos</span></div>
+      </div>
+    }
+  </div>
+</ion-card>

@@ -1,0 +1,16 @@
+Coloca aquí las fotos (JPG, ~800 px de ancho, < 150 KB, nombres en minúsculas):
+
+  login.jpg        Acuario plantado (portada del login)
+  acuario-1.jpg    Acuario comunitario
+  acuario-2.jpg    Nano acuario con gambas
+  neon.jpg         Paracheirodon innesi
+  betta.jpg        Betta splendens
+  corydora.jpg     Corydoras panda
+  escalar.jpg      Pterophyllum scalare
+  guppy.jpg        Poecilia reticulata
+  anubias.jpg      Anubias barteri
+  cherry.jpg       Neocaridina davidi
+  payaso.jpg       Amphiprion ocellaris
+
+Mientras no estén, la app muestra el degradado de la marca con un icono.
+Apunta autor y licencia de cada una en CREDITOS.md (raíz del proyecto).

@@ -1,0 +1,9 @@
+<div [class]="['marca', 'marca--' + tamano(), 'marca--' + variante()]" role="img" aria-label="AquaPedia">
+  <img class="icono" src="assets/marca/icono.png" alt="" />
+  <div class="textos">
+    <span class="nombre"><span class="aqua">Aqua</span><span class="pedia">Pedia</span></span>
+    @if (lema()) {
+      <span class="lema">Enciclopedia de acuariofilia</span>
+    }
+  </div>
+</div>

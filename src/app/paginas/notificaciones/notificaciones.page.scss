@@ -1,0 +1,20 @@
+.segmento { margin: 0 16px 8px; width: auto; }
+
+.icono {
+  width: 40px;
+  height: 40px;
+  margin-inline-end: 12px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+.icono.peligro { color: var(--ion-color-danger);        background: rgba(var(--ion-color-danger-rgb), .12); }
+.icono.aviso   { color: var(--ion-color-warning-shade); background: rgba(var(--ion-color-warning-rgb), .15); }
+.icono.info    { color: var(--ion-color-primary);       background: rgba(var(--ion-color-primary-rgb), .12); }
+.icono.neutra  { color: var(--app-texto-suave);         background: rgba(var(--ion-text-color-rgb), .06); }
+
+.no-leida h3 { font-weight: 700; }
+ion-label h3 { font-family: var(--app-fuente-titulos); font-weight: 500; }
+
+.punto { width: 9px; height: 9px; border-radius: 50%; background: var(--ion-color-primary); }

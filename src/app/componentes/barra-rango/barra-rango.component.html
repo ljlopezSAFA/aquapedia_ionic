@@ -1,0 +1,7 @@
+<div class="cabecera">
+  <span class="etiqueta-rango"><ion-icon [name]="icono()"></ion-icon>{{ etiqueta() }}</span>
+  <strong>{{ min() }}–{{ max() }} {{ unidad() }}</strong>
+</div>
+<div class="barra">
+  <div class="relleno" [style.left.%]="izquierda" [style.width.%]="ancho"></div>
+</div>

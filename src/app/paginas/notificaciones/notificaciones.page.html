@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/especies"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Notificaciones</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="filtro" class="segmento">
+      <ion-segment-button value="todas"><ion-label>Todas</ion-label></ion-segment-button>
+      <ion-segment-button value="noLeidas"><ion-label>No leídas ({{ noLeidas }})</ion-label></ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @for (grupo of grupos; track grupo) {
+    @if (delGrupo(grupo).length > 0) {
+      <p class="titulo-grupo">{{ grupo }}</p>
+      <ion-list [inset]="true">
+        @for (n of delGrupo(grupo); track n.titulo) {
+          <ion-item [button]="true" [class.no-leida]="!n.leida">
+            <div slot="start" class="icono" [class]="n.tipo"><ion-icon [name]="n.icono"></ion-icon></div>
+            <ion-label>
+              <h3>{{ n.titulo }}</h3>
+              <p>{{ n.detalle }}</p>
+            </ion-label>
+            @if (!n.leida) { <span slot="end" class="punto" aria-label="No leída"></span> }
+          </ion-item>
+        }
+      </ion-list>
+    }
+  }
+
+  @if (visibles.length === 0) {
+    <app-estado-vacio icono="notifications-outline" titulo="Todo al día" texto="No tienes notificaciones pendientes." />
+  }
+</ion-content>

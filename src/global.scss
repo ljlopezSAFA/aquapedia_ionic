@@ -1,44 +1,142 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
+/* =====================================================================
+   AquaPedia · Estilos globales
+   Sustituye TODO el contenido de src/global.scss por este fichero.
+   Requiere: npm install @fontsource/lato @fontsource/poppins
+   ===================================================================== */
 
-/* Core CSS required for Ionic components to work properly */
-@import "@ionic/angular/css/core.css";
+/* ── Fuentes ──────────────────────────────────────────────────── */
+@import '@fontsource/lato/400.css';
+@import '@fontsource/lato/700.css';
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/700.css';
 
-/* Basic CSS for apps built with Ionic */
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
+/* ── CSS de Ionic (imprescindible) ────────────────────────────── */
+@import '@ionic/angular/css/core.css';
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/display.css';
 
-/* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+/* ── Utilidades de Ionic (opcionales) ─────────────────────────── */
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+/* ── Modo oscuro activable con un interruptor ─────────────────── */
+@import '@ionic/angular/css/palettes/dark.class.css';
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* =====================================================================
+   Estilo troncal de AquaPedia: así nacen todos los componentes
+   ===================================================================== */
 
+h1, h2, h3, h4, ion-title {
+  font-family: var(--app-fuente-titulos);
+  letter-spacing: -0.01em;
+}
 
+/* Barras superiores: del color del fondo y sin línea */
+ion-toolbar {
+  --background: var(--ion-background-color);
+  --border-width: 0 !important;
+}
+ion-title { font-weight: 600; }
+ion-title[size='large'] { font-weight: 700; }
 
+/* Botones: redondeados, sin mayúsculas, más altos */
+ion-button {
+  --border-radius: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--app-fuente-titulos);
+  font-weight: 600;
+}
+ion-button[expand='block'] { min-height: 50px; }
 
+/* Tarjetas */
+ion-card {
+  --background: var(--app-superficie);
+  margin: 0;
+  border-radius: var(--app-radio);
+  box-shadow: var(--app-sombra);
+}
 
+/* Buscador */
+ion-searchbar {
+  --background: var(--app-superficie);
+  --border-radius: 12px;
+  --box-shadow: 0 0 0 1px var(--app-borde);
+  --placeholder-color: var(--app-texto-suave);
+  --icon-color: var(--app-texto-suave);
+  padding-inline: 16px !important;
+}
 
+/* Listas agrupadas (inset) */
+ion-list.list-inset {
+  margin-inline: 16px;
+  border-radius: var(--app-radio);
+  box-shadow: 0 0 0 1px var(--app-borde);
+}
 
+/* Segmentos */
+ion-segment {
+  --background: rgba(var(--ion-text-color-rgb), .06);
+}
+ion-segment-button {
+  font-family: var(--app-fuente-titulos);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  --indicator-color: var(--app-superficie);
+}
+
+/* Campos con borde (usados con mode="md" fill="outline") */
+ion-input.campo, ion-select.campo, ion-textarea.campo {
+  --border-radius: 12px;
+  --border-color: var(--app-borde);
+  --highlight-color-focused: var(--ion-color-primary);
+  margin-bottom: 14px;
+}
+
+/* Botón flotante: cuadrado redondeado */
+ion-fab-button {
+  --border-radius: 16px;
+  --box-shadow: 0 8px 20px rgba(var(--ion-color-primary-rgb), .35);
+}
+
+/* ── Clases de utilidad propias ───────────────────────────────── */
+.titulo-grupo {
+  margin: 22px 20px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--app-texto-suave);
+}
+
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), .12);
+}
+
+/* Entrada escalonada de listas: class="entrada" [style.--orden]="i" */
+.entrada {
+  animation: aparecer .4s ease-out both;
+  animation-delay: calc(var(--orden, 0) * 60ms);
+}
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .entrada { animation: none; }
+}

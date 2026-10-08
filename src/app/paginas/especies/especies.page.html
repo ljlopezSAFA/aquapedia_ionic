@@ -1,13 +1,57 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>especies</ion-title>
+    <ion-buttons slot="start">
+      <img class="icono-marca" src="assets/marca/icono.png" alt="AquaPedia" />
+    </ion-buttons>
+    <ion-title>Especies</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="campana" routerLink="/notificaciones" aria-label="Notificaciones">
+        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+        <ion-badge color="danger">3</ion-badge>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">especies</ion-title>
+      <ion-title size="large">Especies</ion-title>
     </ion-toolbar>
   </ion-header>
+  <p class="subtitulo">La enciclopedia de tu acuario</p>
+
+  <ion-searchbar placeholder="Buscar por nombre común o científico" [(ngModel)]="busqueda"></ion-searchbar>
+
+  <div class="filtros">
+    @for (f of filtros; track f.valor) {
+      <ion-chip class="filtro" [class.activo]="filtro === f.valor" (click)="filtro = f.valor">
+        {{ f.texto }}
+      </ion-chip>
+    }
+  </div>
+
+  <!-- Especie destacada -->
+  @if (!hayFiltros) {
+    <a class="destacada" [routerLink]="['/app/especies', destacada.id]">
+      <img [src]="destacada.foto" [alt]="destacada.nombreComun" />
+      <div class="destacada-texto">
+        <span class="etiqueta-clara">Especie de la semana</span>
+        <h2>{{ destacada.nombreComun }}</h2>
+        <p>{{ destacada.descripcion }}</p>
+      </div>
+    </a>
+    <p class="titulo-grupo">Todas las especies</p>
+  }
+
+  <div class="rejilla">
+    @for (especie of especiesVisibles; track especie.id; let i = $index) {
+      <app-tarjeta-especie class="entrada" [style.--orden]="i" [especie]="especie" />
+    } @empty {
+      <app-estado-vacio class="todo-el-ancho" icono="search-outline" titulo="Sin resultados"
+                        texto="Prueba con otro nombre o quita los filtros.">
+        <ion-button fill="outline" (click)="limpiar()">Quitar filtros</ion-button>
+      </app-estado-vacio>
+    }
+  </div>
 </ion-content>

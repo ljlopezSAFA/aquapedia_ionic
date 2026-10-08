@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Mis acuarios</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/notificaciones" aria-label="Notificaciones">
+        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Mis acuarios</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (acuarios.length > 0) {
+    <p class="subtitulo">{{ acuarios.length }} acuarios · {{ totalHabitantes }} especies en total</p>
+  }
+
+  <div class="contenido">
+    @for (acuario of acuarios; track acuario.id; let i = $index) {
+      <app-tarjeta-acuario class="entrada" [style.--orden]="i" [acuario]="acuario" />
+    } @empty {
+      <app-estado-vacio icono="water-outline" titulo="Aún no tienes acuarios"
+                        texto="Registra el primero para llevar el control del agua y del mantenimiento.">
+        <ion-button routerLink="/app/acuarios/nuevo">Crear mi primer acuario</ion-button>
+      </app-estado-vacio>
+    }
+  </div>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button routerLink="/app/acuarios/nuevo" aria-label="Nuevo acuario">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

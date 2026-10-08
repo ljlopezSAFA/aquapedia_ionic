@@ -1,0 +1,48 @@
+.subtitulo { margin: -6px 20px 10px; color: var(--app-texto-suave); }
+.contenido { padding: 4px 16px 32px; }
+.titulo-grupo { margin-inline: 4px; }
+
+/* ── Chips de síntomas: ion-chip modificado ─────────────── */
+.sintomas { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 16px 16px; }
+
+ion-chip.sintoma {
+  --background: var(--app-superficie);
+  --color: var(--ion-text-color);
+  margin: 0;
+  border: 1px solid var(--app-borde);
+  font-weight: 700;
+  transition: all .2s;
+}
+
+ion-chip.sintoma.marcado {
+  --background: rgba(var(--ion-color-primary-rgb), .12);
+  --color: var(--ion-color-primary);
+  border-color: var(--ion-color-primary);
+}
+
+/* ── Resultados ─────────────────────────────────────────── */
+ion-accordion-group {
+  border-radius: var(--app-radio);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--app-borde);
+}
+
+ion-accordion ion-item[slot='header'] h3 { font-family: var(--app-fuente-titulos); font-weight: 600; }
+
+ion-progress-bar { height: 6px; margin-top: 8px; border-radius: 6px; }
+
+.detalle {
+  padding: 4px 16px 14px;
+  background: var(--app-superficie);
+  p { margin: 6px 0; }
+}
+
+.aviso-cobre {
+  display: flex;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--ion-color-danger);
+  ion-icon { flex-shrink: 0; margin-top: 2px; }
+}
+
+.nota { margin: 10px 4px 0; font-size: 12px; color: var(--app-texto-suave); }

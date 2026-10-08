@@ -1,0 +1,34 @@
+:host { display: block; margin-bottom: 18px; }
+
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+
+  strong { font-family: var(--app-fuente-titulos); font-weight: 600; }
+}
+
+.etiqueta-rango {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--app-texto-suave);
+  ion-icon { font-size: 18px; color: var(--ion-color-primary); }
+}
+
+.barra {
+  position: relative;
+  height: 8px;
+  margin-top: 8px;
+  border-radius: 8px;
+  background: rgba(var(--ion-text-color-rgb), .08);
+}
+
+.relleno {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--ion-color-secondary), var(--ion-color-primary));
+}

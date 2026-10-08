@@ -1,0 +1,126 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/acuarios"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ acuario?.nombre }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (acuario; as a) {
+    <div class="contenido">
+
+      <!-- Cabecera del acuario -->
+      <div class="resumen">
+        <div class="miniatura"><img [src]="a.foto" alt="" /></div>
+        <div>
+          <h1>{{ a.nombre }}</h1>
+          <p>{{ a.litros }} L · {{ a.medidas }}</p>
+          <p>Montado en {{ a.desde }}</p>
+        </div>
+      </div>
+
+      <ion-segment [(ngModel)]="vista">
+        <ion-segment-button value="habitantes"><ion-label>Habitantes</ion-label></ion-segment-button>
+        <ion-segment-button value="agua"><ion-label>Agua</ion-label></ion-segment-button>
+        <ion-segment-button value="tareas"><ion-label>Tareas</ion-label></ion-segment-button>
+      </ion-segment>
+
+      @switch (vista) {
+        @case ('habitantes') {
+          @for (aviso of a.avisos; track aviso) {
+            <div class="aviso"><ion-icon name="warning-outline"></ion-icon><span>{{ aviso }}</span></div>
+          }
+          <ion-list [inset]="true">
+            @for (h of a.habitantes; track h.especie.id) {
+              <ion-item-sliding>
+                <ion-item [routerLink]="['/app/especies', h.especie.id]" [button]="true">
+                  <ion-avatar slot="start"><img [src]="h.especie.foto" alt="" /></ion-avatar>
+                  <ion-label>
+                    <h3>{{ h.especie.nombreComun }}</h3>
+                    <p>{{ h.especie.nombreCientifico }}</p>
+                  </ion-label>
+                  <ion-note slot="end" class="cantidad">{{ h.cantidad }}</ion-note>
+                </ion-item>
+                <ion-item-options side="end">
+                  <ion-item-option color="danger">Dar de baja</ion-item-option>
+                </ion-item-options>
+              </ion-item-sliding>
+            }
+          </ion-list>
+          <p class="ayuda">Desliza un habitante hacia la izquierda para darlo de baja.</p>
+        }
+        @case ('agua') {
+          @if (a.mediciones[0]; as m) {
+            <p class="titulo-grupo">Última medición · {{ m.fecha }}</p>
+            <div class="baldosas">
+              <div><strong>{{ m.temperatura }}°</strong><span>Temperatura</span></div>
+              <div><strong>{{ m.ph }}</strong><span>pH</span></div>
+              <div [class.mal]="m.nitritos > 0"><strong>{{ m.nitritos }}</strong><span>Nitritos</span></div>
+            </div>
+          }
+          <p class="titulo-grupo">Historial</p>
+          <ion-list [inset]="true">
+            @for (m of a.mediciones; track m.fecha) {
+              <ion-item>
+                <ion-label>{{ m.fecha }}</ion-label>
+                <ion-note slot="end">{{ m.temperatura }}° · pH {{ m.ph }}</ion-note>
+              </ion-item>
+            }
+          </ion-list>
+        }
+        @case ('tareas') {
+          <ion-list [inset]="true">
+            @for (t of a.tareas; track t.titulo) {
+              <ion-item>
+                <ion-checkbox slot="start" aria-label="Marcar como hecha"></ion-checkbox>
+                <ion-label>
+                  <h3>{{ t.titulo }}</h3>
+                  <p>{{ t.cuando }}</p>
+                </ion-label>
+                @switch (t.estado) {
+                  @case ('ATRASADA') { <ion-badge slot="end" color="danger">Atrasada</ion-badge> }
+                  @case ('HOY') { <ion-badge slot="end" color="warning">Hoy</ion-badge> }
+                }
+              </ion-item>
+            } @empty {
+              <ion-item><ion-label>No hay tareas programadas</ion-label></ion-item>
+            }
+          </ion-list>
+        }
+      }
+    </div>
+
+    <!-- Botón flotante: nueva medición -->
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button (click)="modalAbierto = true" aria-label="Nueva medición">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <!-- Hoja: nueva medición -->
+    <ion-modal [isOpen]="modalAbierto" (didDismiss)="modalAbierto = false"
+               [initialBreakpoint]="0.6" [breakpoints]="[0, 0.6, 0.95]">
+      <ng-template>
+        <ion-content class="ion-padding hoja-modal">
+          <div class="cabecera-modal">
+            <h2>Nueva medición</h2>
+            <ion-button fill="clear" (click)="modalAbierto = false">Cancelar</ion-button>
+          </div>
+          <p class="ayuda-modal">Rellena solo los parámetros que hayas medido.</p>
+          <div class="dos-columnas">
+            <ion-input class="campo" mode="md" fill="outline" label="Temperatura (°C)" labelPlacement="floating" type="number"></ion-input>
+            <ion-input class="campo" mode="md" fill="outline" label="pH" labelPlacement="floating" type="number"></ion-input>
+            <ion-input class="campo" mode="md" fill="outline" label="Amoníaco (mg/L)" labelPlacement="floating" type="number"></ion-input>
+            <ion-input class="campo" mode="md" fill="outline" label="Nitritos (mg/L)" labelPlacement="floating" type="number"></ion-input>
+          </div>
+          <ion-button expand="block" (click)="modalAbierto = false">Guardar medición</ion-button>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+  } @else {
+    <app-estado-vacio icono="water-outline" titulo="Acuario no encontrado" />
+  }
+</ion-content>

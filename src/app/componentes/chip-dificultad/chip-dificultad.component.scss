@@ -1,0 +1,10 @@
+.chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.facil   { color: var(--ion-color-success);       background: rgba(var(--ion-color-success-rgb), .14); }
+.media   { color: var(--ion-color-warning-shade); background: rgba(var(--ion-color-warning-rgb), .16); }
+.dificil { color: var(--ion-color-danger);        background: rgba(var(--ion-color-danger-rgb), .14); }

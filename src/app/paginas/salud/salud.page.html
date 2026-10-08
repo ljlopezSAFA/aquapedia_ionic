@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Salud</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Salud</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <p class="subtitulo">¿Qué le notas a tu pez? Marca todo lo que veas.</p>
+
+  <div class="sintomas">
+    @for (s of sintomas; track s.nombre) {
+      <ion-chip class="sintoma" [class.marcado]="s.marcado" (click)="alternar(s)">
+        @if (s.marcado) { <ion-icon name="checkmark"></ion-icon> }
+        <ion-label>{{ s.nombre }}</ion-label>
+      </ion-chip>
+    }
+  </div>
+
+  <div class="contenido">
+    <ion-button expand="block" [disabled]="numMarcados === 0" (click)="verResultados = true">
+      Ver posibles enfermedades ({{ numMarcados }})
+    </ion-button>
+
+    @if (verResultados) {
+      <p class="titulo-grupo">Resultados</p>
+      <ion-accordion-group>
+        @for (r of resultados; track r.enfermedad) {
+          <ion-accordion [value]="r.enfermedad">
+            <ion-item slot="header">
+              <ion-label>
+                <h3>{{ r.enfermedad }}</h3>
+                <ion-progress-bar [value]="r.probabilidad / 100" [color]="colorDe(r.probabilidad)"></ion-progress-bar>
+              </ion-label>
+              <ion-badge slot="end" [color]="colorDe(r.probabilidad)">{{ r.nivel }}</ion-badge>
+            </ion-item>
+            <div slot="content" class="detalle">
+              <p>{{ r.tratamiento }}</p>
+              @if (r.cobre) {
+                <p class="aviso-cobre">
+                  <ion-icon name="warning-outline"></ion-icon>
+                  Suele tratarse con cobre: peligroso para gambas y caracoles.
+                </p>
+              }
+            </div>
+          </ion-accordion>
+        }
+      </ion-accordion-group>
+      <p class="nota">Orientativo. Ante la duda, consulta con un especialista.</p>
+    }
+  </div>
+</ion-content>

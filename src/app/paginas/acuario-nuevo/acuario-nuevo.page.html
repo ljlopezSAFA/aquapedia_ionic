@@ -1,0 +1,64 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/acuarios"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nuevo acuario</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [strong]="true" routerLink="/app/acuarios" routerDirection="back">Guardar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="contenido">
+
+    <p class="titulo-grupo">Datos básicos</p>
+    <ion-input class="campo" mode="md" fill="outline" label="Nombre" labelPlacement="floating"
+               placeholder="Ej.: Comunitario del salón" [counter]="true" maxlength="40"></ion-input>
+
+    <div class="tres-columnas">
+      <ion-input class="campo" mode="md" fill="outline" label="Litros" labelPlacement="floating" type="number"></ion-input>
+      <ion-input class="campo" mode="md" fill="outline" label="Largo (cm)" labelPlacement="floating" type="number"></ion-input>
+      <ion-input class="campo" mode="md" fill="outline" label="Alto (cm)" labelPlacement="floating" type="number"></ion-input>
+    </div>
+
+    <p class="titulo-grupo">Tipo de agua</p>
+    <ion-segment value="DULCE">
+      <ion-segment-button value="DULCE"><ion-label>Dulce</ion-label></ion-segment-button>
+      <ion-segment-button value="SALOBRE"><ion-label>Salobre</ion-label></ion-segment-button>
+      <ion-segment-button value="MARINA"><ion-label>Marina</ion-label></ion-segment-button>
+    </ion-segment>
+
+    <p class="titulo-grupo">Detalles</p>
+    <ion-list [inset]="true">
+      <ion-item>
+        <ion-label>Fecha de montaje</ion-label>
+        <ion-datetime-button datetime="fecha-montaje" slot="end"></ion-datetime-button>
+      </ion-item>
+      <ion-item>
+        <ion-select label="Iluminación" interface="action-sheet" placeholder="Elige">
+          <ion-select-option value="LED">LED</ion-select-option>
+          <ion-select-option value="T5">Tubos T5</ion-select-option>
+          <ion-select-option value="NATURAL">Luz natural</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-toggle>Tiene CO₂</ion-toggle>
+      </ion-item>
+    </ion-list>
+
+    <p class="titulo-grupo">Notas</p>
+    <ion-textarea class="campo" mode="md" fill="outline" label="Notas (opcional)" labelPlacement="floating"
+                  [autoGrow]="true" rows="3"></ion-textarea>
+
+    <ion-button expand="block" routerLink="/app/acuarios" routerDirection="back">Crear acuario</ion-button>
+  </div>
+
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime id="fecha-montaje" presentation="date" locale="es-ES" [firstDayOfWeek]="1"
+                    [showDefaultButtons]="true" doneText="Aceptar" cancelText="Cancelar"></ion-datetime>
+    </ng-template>
+  </ion-modal>
+</ion-content>

@@ -1,0 +1,50 @@
+<ion-content [fullscreen]="true">
+
+  <div class="cabecera-perfil">
+    <div class="avatar">P</div>
+    <h2>Pablo Romero</h2>
+    <p>pablo&#64;aquapedia.es</p>
+
+    <div class="estadisticas">
+      <div><strong>2</strong><span>Acuarios</span></div>
+      <div><strong>6</strong><span>Especies</span></div>
+      <div><strong>12</strong><span>Favoritas</span></div>
+    </div>
+  </div>
+
+  <p class="titulo-grupo">Preferencias</p>
+  <ion-list [inset]="true">
+    <ion-item>
+      <ion-icon slot="start" name="moon-outline"></ion-icon>
+      <ion-toggle [checked]="oscuro" (ionChange)="cambiarTema($event)">Modo oscuro</ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="notifications-outline"></ion-icon>
+      <ion-toggle [checked]="true">Avisos diarios</ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <p class="titulo-grupo">Información</p>
+  <ion-list [inset]="true">
+    <ion-item [button]="true" [detail]="true">
+      <ion-icon slot="start" name="information-circle-outline"></ion-icon>
+      <ion-label>Acerca de AquaPedia</ion-label>
+    </ion-item>
+    <ion-item [button]="true" [detail]="true">
+      <ion-icon slot="start" name="images-outline"></ion-icon>
+      <ion-label>Créditos de las fotografías</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list [inset]="true">
+    <ion-item [button]="true" routerLink="/login" routerDirection="root" class="salir">
+      <ion-label color="danger">Cerrar sesión</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <footer class="pie">
+    <app-marca tamano="s" />
+    <span>Versión 1.0 · SAFA Ntra. Sra. de los Reyes</span>
+  </footer>
+
+</ion-content>

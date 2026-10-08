@@ -1,2 +1,119 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+// =====================================================================
+//  AquaPedia · Tema
+//  Colores sacados del logo: azul laguna #0E7490, azul abisal #0B2A3C,
+//  gris del lema #4B5563 y, en modo oscuro, cian #5FD3E0 sobre #0B1F2E.
+// =====================================================================
+
+:root {
+  /* ── Tipografía ─────────────────────────────────────────────── */
+  --ion-font-family: 'Lato', system-ui, -apple-system, sans-serif;
+  --app-fuente-titulos: 'Poppins', var(--ion-font-family);
+
+  /* ── Fondo y texto ──────────────────────────────────────────── */
+  --ion-background-color: #f3f6f8;
+  --ion-background-color-rgb: 243, 246, 248;
+  --ion-text-color: #0b2a3c;
+  --ion-text-color-rgb: 11, 42, 60;
+
+  /* ── Primary · azul laguna (el del icono) ───────────────────── */
+  --ion-color-primary: #0e7490;
+  --ion-color-primary-rgb: 14, 116, 144;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #0c667f;
+  --ion-color-primary-tint: #26829b;
+
+  /* ── Secondary · cian (el "Aqua" del logo oscuro) ───────────── */
+  --ion-color-secondary: #5fd3e0;
+  --ion-color-secondary-rgb: 95, 211, 224;
+  --ion-color-secondary-contrast: #0b2a3c;
+  --ion-color-secondary-contrast-rgb: 11, 42, 60;
+  --ion-color-secondary-shade: #54bac5;
+  --ion-color-secondary-tint: #6fd7e3;
+
+  /* ── Tertiary · arena (acento cálido para destacar) ─────────── */
+  --ion-color-tertiary: #f2a65a;
+  --ion-color-tertiary-rgb: 242, 166, 90;
+  --ion-color-tertiary-contrast: #0b2a3c;
+  --ion-color-tertiary-contrast-rgb: 11, 42, 60;
+  --ion-color-tertiary-shade: #d5924f;
+  --ion-color-tertiary-tint: #f3af6b;
+
+  /* ── Estados ────────────────────────────────────────────────── */
+  --ion-color-success: #2f9e6b;
+  --ion-color-success-rgb: 47, 158, 107;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #298b5e;
+  --ion-color-success-tint: #44a87a;
+
+  --ion-color-warning: #d98a1a;
+  --ion-color-warning-rgb: 217, 138, 26;
+  --ion-color-warning-contrast: #0b2a3c;
+  --ion-color-warning-contrast-rgb: 11, 42, 60;
+  --ion-color-warning-shade: #bf7917;
+  --ion-color-warning-tint: #dd9531;
+
+  --ion-color-danger: #d6534a;
+  --ion-color-danger-rgb: 214, 83, 74;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #bc4941;
+  --ion-color-danger-tint: #da635c;
+
+  /* ── Medium · gris del lema del logo ────────────────────────── */
+  --ion-color-medium: #4b5563;
+  --ion-color-medium-rgb: 75, 85, 99;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #424b57;
+  --ion-color-medium-tint: #5d6673;
+
+  /* ── Variables propias de AquaPedia (design tokens) ─────────── */
+  --app-superficie: #ffffff;                 /* tarjetas, listas, hojas */
+  --app-borde: #e2e8ec;                      /* líneas finas */
+  --app-texto-suave: #6b7785;                /* textos secundarios */
+  --app-marca-pedia: #0b2a3c;                /* el "Pedia" del logo */
+  --app-radio: 16px;
+  --app-radio-grande: 24px;
+  --app-sombra: 0 1px 2px rgba(11, 42, 60, .05), 0 4px 14px rgba(11, 42, 60, .07);
+  --app-degradado-marca: linear-gradient(160deg, #0e7490 0%, #0b2a3c 100%);
+}
+
+/* =====================================================================
+   Modo oscuro (se activa con la clase .ion-palette-dark en <html>)
+   Colores del logo sobre fondo oscuro.
+   ===================================================================== */
+.ion-palette-dark {
+  --ion-color-primary: #5fd3e0;
+  --ion-color-primary-rgb: 95, 211, 224;
+  --ion-color-primary-contrast: #0b1f2e;
+  --ion-color-primary-contrast-rgb: 11, 31, 46;
+  --ion-color-primary-shade: #54bac5;
+  --ion-color-primary-tint: #6fd7e3;
+
+  --ion-color-medium: #b8c7d1;
+  --ion-color-medium-rgb: 184, 199, 209;
+  --ion-color-medium-contrast: #0b1f2e;
+  --ion-color-medium-contrast-rgb: 11, 31, 46;
+  --ion-color-medium-shade: #a2afb8;
+  --ion-color-medium-tint: #bfcdd6;
+
+  --app-superficie: #12293a;
+  --app-borde: #1d3a4d;
+  --app-texto-suave: #b8c7d1;
+  --app-marca-pedia: #ffffff;
+  --app-sombra: none;
+}
+
+/* Ionic pone el fondo oscuro sobre <body>; lo sobrescribimos con la misma precisión */
+.ion-palette-dark.ios body,
+.ion-palette-dark.md body {
+  --ion-background-color: #0b1f2e;
+  --ion-background-color-rgb: 11, 31, 46;
+  --ion-text-color: #eef4f7;
+  --ion-text-color-rgb: 238, 244, 247;
+  --ion-item-background: #12293a;
+  --ion-toolbar-background: #0b1f2e;
+  --ion-tab-bar-background: #12293a;
+}

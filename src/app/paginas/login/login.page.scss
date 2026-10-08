@@ -1,0 +1,69 @@
+.login { --background: var(--app-superficie); }
+
+/* ── Zona 1 ─────────────────────────────────────────────── */
+.portada {
+  position: relative;
+  height: 44vh;
+  min-height: 280px;
+  background: var(--app-degradado-marca);
+  overflow: hidden;
+
+  img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* Degradado encima de la foto para que el logo se lea siempre */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(11, 31, 46, .45) 0%, rgba(11, 31, 46, .05) 45%, rgba(11, 31, 46, .75) 100%);
+  }
+}
+
+.marca-portada {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 48px;
+  z-index: 1;
+}
+
+/* ── Zona 2 ─────────────────────────────────────────────── */
+.hoja {
+  position: relative;
+  z-index: 2;
+  margin-top: -28px;
+  border-radius: var(--app-radio-grande) var(--app-radio-grande) 0 0;
+  background: var(--app-superficie);
+  padding: 30px 24px calc(24px + var(--ion-safe-area-bottom, 0px));
+
+  h1 { margin: 0; font-size: 28px; font-weight: 700; }
+  .subtitulo { margin: 4px 0 24px; color: var(--app-texto-suave); }
+  ion-input ion-icon { color: var(--app-texto-suave); margin-inline-end: 8px; }
+}
+
+.olvido {
+  display: block;
+  margin: -4px 0 20px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+}
+
+.separador {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0;
+  color: var(--app-texto-suave);
+  font-size: 13px;
+
+  &::before, &::after { content: ''; flex: 1; height: 1px; background: var(--app-borde); }
+}
+
+.registro {
+  margin-top: 22px;
+  text-align: center;
+  color: var(--app-texto-suave);
+  a { color: var(--ion-color-primary); font-weight: 700; }
+}

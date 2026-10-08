@@ -1,0 +1,18 @@
+:host { display: block; }
+
+.vacio { text-align: center; padding: 48px 24px; }
+
+.icono {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 16px;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  font-size: 38px;
+  color: var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), .1);
+}
+
+h3 { margin: 0 0 6px; font-size: 18px; }
+p  { margin: 0 0 18px; color: var(--app-texto-suave); }

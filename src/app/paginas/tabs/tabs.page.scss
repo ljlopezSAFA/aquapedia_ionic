@@ -1,0 +1,31 @@
+ion-tab-bar {
+  --background: var(--app-superficie);
+  --border: 1px solid var(--app-borde);
+  --color: var(--app-texto-suave);
+  --color-selected: var(--ion-color-primary);
+  height: 66px;
+  padding-top: 4px;
+}
+
+ion-tab-button {
+  --ripple-color: transparent;
+
+  ion-icon {
+    font-size: 22px;
+    padding: 4px 18px;
+    border-radius: 999px;                     /* forma de píldora */
+    transition: background-color .25s, transform .25s;
+  }
+
+  ion-label {
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+}
+
+/* Pestaña activa: píldora de color suave detrás del icono */
+ion-tab-button.tab-selected ion-icon {
+  background: rgba(var(--ion-color-primary-rgb), .14);
+  transform: translateY(-1px);
+}
