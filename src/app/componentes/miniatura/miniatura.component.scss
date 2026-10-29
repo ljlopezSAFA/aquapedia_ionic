@@ -1,0 +1,14 @@
+:host { display: block; }
+
+ion-thumbnail {
+  --border-radius: 12px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  background: var(--app-degradado-marca);
+
+  ion-icon { font-size: calc(var(--size) * .5); color: rgba(255, 255, 255, .92); }
+}
+
+ion-thumbnail.redonda { --border-radius: 50%; }

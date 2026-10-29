@@ -1,0 +1,33 @@
+<ion-card [routerLink]="['/app/especies', especie().id]" [button]="true">
+
+  <!-- Foto (img normal: ion-img está obsoleto en Ionic 9) -->
+  <div class="foto">
+    @if (!sinFoto) {
+      <img [src]="especie().foto" [alt]="especie().nombreComun" loading="lazy" (error)="sinFoto = true" />
+    } @else {
+      <ion-icon class="sin-foto" [name]="iconoTipo"></ion-icon>
+    }
+    <ion-badge class="favorita" [class.activa]="especie().favorita">
+      <ion-icon [name]="especie().favorita ? 'heart' : 'heart-outline'"></ion-icon>
+    </ion-badge>
+  </div>
+
+  <ion-card-header>
+    <ion-card-title>{{ especie().nombreComun }}</ion-card-title>
+    <ion-card-subtitle>{{ especie().nombreCientifico }}</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    @if (detalle()) {
+      <ion-note class="detalle">{{ detalle() }}</ion-note>
+    }
+    <div class="pie">
+      <app-chip-dificultad [dificultad]="especie().dificultad" />
+      <ion-note class="temperatura">
+        <ion-icon name="thermometer-outline"></ion-icon>
+        {{ especie().temperatura.min }}–{{ especie().temperatura.max }}°
+      </ion-note>
+    </div>
+  </ion-card-content>
+
+</ion-card>

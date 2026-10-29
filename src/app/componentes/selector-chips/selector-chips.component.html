@@ -1,0 +1,10 @@
+@for (o of opciones(); track o.valor) {
+  <ion-chip [class.marcado]="marcado(o.valor)" (click)="alternar(o.valor)">
+    @if (marcado(o.valor)) {
+      <ion-icon name="checkmark"></ion-icon>
+    } @else if (o.icono) {
+      <ion-icon [name]="o.icono"></ion-icon>
+    }
+    <ion-label>{{ o.texto }}</ion-label>
+  </ion-chip>
+}

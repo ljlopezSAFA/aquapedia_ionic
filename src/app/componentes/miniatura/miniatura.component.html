@@ -1,0 +1,7 @@
+<ion-thumbnail [class.redonda]="redonda()" [style.--size.px]="tamano()">
+  @if (foto() && !sinFoto) {
+    <img [src]="foto()" alt="" loading="lazy" (error)="sinFoto = true" />
+  } @else {
+    <ion-icon [name]="icono()"></ion-icon>
+  }
+</ion-thumbnail>

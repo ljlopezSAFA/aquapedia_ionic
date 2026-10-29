@@ -1,0 +1,75 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-thumbnail class="icono-marca">
+        <img src="assets/marca/icono.png" alt="AquaPedia" />
+      </ion-thumbnail>
+    </ion-buttons>
+    <ion-title>Especies</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="campana" routerLink="/notificaciones" aria-label="Notificaciones">
+        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+        <ion-badge color="danger">3</ion-badge>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Especies</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-note class="subtitulo">La enciclopedia de tu acuario</ion-note>
+
+  <ion-searchbar placeholder="Buscar por nombre común o científico" [(ngModel)]="busqueda"></ion-searchbar>
+
+  @if (busqueda === '') {
+
+    <!-- Entradas al buscador avanzado -->
+    <ion-grid class="grupos">
+      <ion-row>
+        @for (g of grupos; track g.valor) {
+          <ion-col size="4">
+            <ion-card [button]="true" routerLink="/app/especies/buscar" [queryParams]="{ tipo: g.valor }">
+              <ion-card-content>
+                <ion-icon [name]="g.icono"></ion-icon>
+                <ion-card-title>{{ g.texto }}</ion-card-title>
+                <ion-note>{{ contar(g.valor) }} fichas</ion-note>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+
+    <ion-button class="avanzada" fill="clear" expand="block" routerLink="/app/especies/buscar">
+      <ion-icon slot="start" name="options-outline"></ion-icon>
+      Búsqueda avanzada con filtros
+    </ion-button>
+
+    <!-- Especie destacada -->
+    <ion-card class="destacada" [button]="true" [routerLink]="['/app/especies', destacada.id]">
+      <img [src]="destacada.foto" [alt]="destacada.nombreComun" />
+      <ion-card-content class="destacada-texto">
+        <ion-badge class="etiqueta-clara">Especie de la semana</ion-badge>
+        <ion-card-title>{{ destacada.nombreComun }}</ion-card-title>
+        <ion-text><p>{{ destacada.descripcion }}</p></ion-text>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-text class="titulo-grupo">Tus favoritas</ion-text>
+  }
+
+  <div class="rejilla">
+    @for (especie of especiesVisibles; track especie.id; let i = $index) {
+      <app-tarjeta-especie class="entrada" [style.--orden]="i" [especie]="especie" />
+    } @empty {
+      <app-estado-vacio class="todo-el-ancho" icono="search-outline" titulo="Sin resultados"
+                        texto="Prueba con otro nombre o usa la búsqueda avanzada.">
+        <ion-button fill="outline" routerLink="/app/especies/buscar">Búsqueda avanzada</ion-button>
+      </app-estado-vacio>
+    }
+  </div>
+</ion-content>

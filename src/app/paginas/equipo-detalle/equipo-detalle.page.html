@@ -1,0 +1,98 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="sobre-portada">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/equipo" text=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (equipo; as e) {
+
+    <!-- Portada con el icono de la categoría -->
+    <div class="portada">
+      <ion-icon [name]="categoria.icono ?? 'cube-outline'"></ion-icon>
+    </div>
+
+    <div class="hoja">
+      <ion-text color="primary"><p class="categoria">{{ categoria.texto }}</p></ion-text>
+      <h1>{{ e.nombre }}</h1>
+
+      <div class="etiquetas">
+        <ion-chip [color]="nivel.color" class="mini">{{ nivel.texto }}</ion-chip>
+        @if (e.imprescindible) {
+          <ion-chip color="tertiary" class="mini">Imprescindible</ion-chip>
+        }
+        @if (e.litrosMin && e.litrosMax) {
+          <ion-chip color="primary" class="mini">{{ e.litrosMin }}–{{ e.litrosMax }} L</ion-chip>
+        }
+      </div>
+
+      <ion-card class="precio">
+        <ion-card-content>
+          <ion-note>Precio orientativo</ion-note>
+          <ion-text><h2>{{ e.precio }}</h2></ion-text>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-text><p class="descripcion">{{ e.descripcion }}</p></ion-text>
+
+      <!-- Características -->
+      <ion-list [inset]="true" class="sin-margen">
+        <ion-list-header><ion-label>Características</ion-label></ion-list-header>
+        @for (c of e.caracteristicas; track c.etiqueta) {
+          <ion-item>
+            <ion-label class="ion-text-wrap">
+              <p>{{ c.etiqueta }}</p>
+              <h3>{{ c.valor }}</h3>
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+
+      <!-- Ventajas e inconvenientes -->
+      <ion-list [inset]="true" class="sin-margen">
+        <ion-list-header><ion-label>Ventajas</ion-label></ion-list-header>
+        @for (v of e.ventajas; track v) {
+          <ion-item lines="none">
+            <ion-icon slot="start" name="thumbs-up-outline" color="success"></ion-icon>
+            <ion-label class="ion-text-wrap">{{ v }}</ion-label>
+          </ion-item>
+        }
+      </ion-list>
+
+      <ion-list [inset]="true" class="sin-margen">
+        <ion-list-header><ion-label>Inconvenientes</ion-label></ion-list-header>
+        @for (i of e.inconvenientes; track i) {
+          <ion-item lines="none">
+            <ion-icon slot="start" name="thumbs-down-outline" color="danger"></ion-icon>
+            <ion-label class="ion-text-wrap">{{ i }}</ion-label>
+          </ion-item>
+        }
+      </ion-list>
+
+      <!-- Consejo -->
+      @if (e.consejo) {
+        <ion-card class="consejo">
+          <ion-card-header>
+            <ion-card-title><ion-icon name="bulb-outline"></ion-icon> Consejo</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>{{ e.consejo }}</ion-card-content>
+        </ion-card>
+      }
+
+      <!-- Relacionados -->
+      @if (relacionados.length > 0) {
+        <ion-list [inset]="true" class="sin-margen">
+          <ion-list-header><ion-label>Otras opciones de {{ categoria.texto.toLowerCase() }}</ion-label></ion-list-header>
+          @for (r of relacionados; track r.id) {
+            <app-tarjeta-equipo [equipo]="r" />
+          }
+        </ion-list>
+      }
+    </div>
+
+  } @else {
+    <app-estado-vacio icono="construct-outline" titulo="Equipo no encontrado" />
+  }
+</ion-content>

@@ -1,0 +1,76 @@
+:host { display: block; }
+
+ion-card { height: 100%; }
+
+/* ── Foto ────────────────────────────────────────────────── */
+.foto {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--app-degradado-marca);      /* se ve mientras carga o si no hay foto */
+  display: grid;
+  place-items: center;
+
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sin-foto { font-size: 40px; color: rgba(255, 255, 255, .85); }
+}
+
+/* ion-badge convertido en botón redondo blanco */
+ion-badge.favorita {
+  --background: rgba(255, 255, 255, .92);
+  --color: #0b2a3c;
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
+
+  &.activa { --color: var(--ion-color-danger); }
+}
+
+/* ── Cabecera de la tarjeta ──────────────────────────────── */
+ion-card-header { padding: 10px 12px 0; gap: 2px; }
+
+ion-card-title {
+  --color: var(--ion-text-color);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+ion-card-subtitle {
+  --color: var(--app-texto-suave);
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+  text-transform: none;              /* en iOS el subtítulo va en mayúsculas por defecto */
+  letter-spacing: 0;
+}
+
+/* ── Pie de la tarjeta ───────────────────────────────────── */
+ion-card-content { padding: 8px 12px 12px; }
+
+ion-note.detalle {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  --color: var(--app-texto-suave);
+}
+
+.pie { display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+
+ion-note.temperatura {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  --color: var(--app-texto-suave);
+}

@@ -1,0 +1,72 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Equipo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Equipo</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-note class="intro">Filtros, calefacción, luz, acondicionadores… qué necesitas y para qué sirve.</ion-note>
+
+  <ion-searchbar placeholder="Buscar equipo" [(ngModel)]="busqueda" [debounce]="200"></ion-searchbar>
+
+  <div class="categorias">
+    <app-selector-chips [desplazable]="true" [multiple]="false"
+                        [opciones]="OP_CATEGORIA_EQUIPO" [(seleccion)]="categorias" />
+  </div>
+
+  <!-- Filtro por litros -->
+  <ion-item lines="none" class="titulo-filtro">
+    <ion-label>Para mi acuario de</ion-label>
+    <ion-note slot="end">{{ litros === null ? 'Cualquiera' : litros + ' L' }}</ion-note>
+    @if (litros !== null) {
+      <ion-button slot="end" fill="clear" size="small" (click)="litros = null">Quitar</ion-button>
+    }
+  </ion-item>
+  <ion-range class="rango-litros" [min]="10" [max]="600" [step]="10" [pin]="true" [(ngModel)]="litros"
+             aria-label="Litros del acuario">
+    <ion-note slot="start">10 L</ion-note>
+    <ion-note slot="end">600 L</ion-note>
+  </ion-range>
+
+  <!-- Imprescindibles (solo sin filtros) -->
+  @if (!filtrando) {
+    <ion-text class="titulo-grupo">Imprescindibles para empezar</ion-text>
+    <div class="imprescindibles">
+      @for (e of imprescindibles; track e.id) {
+        <ion-card [routerLink]="['/app/equipo', e.id]" [button]="true">
+          <app-miniatura [icono]="iconoDe(e)" [tamano]="44" />
+          <ion-card-header>
+            <ion-card-title>{{ e.nombre }}</ion-card-title>
+            <ion-card-subtitle>{{ e.precio }}</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      }
+    </div>
+  }
+
+  <!-- Listado agrupado por categoría -->
+  @for (g of grupos; track g.categoria.valor) {
+    <ion-list [inset]="true">
+      <ion-list-header>
+        <ion-icon [name]="g.categoria.icono" color="primary"></ion-icon>
+        <ion-label>{{ g.categoria.texto }}</ion-label>
+        <ion-note>{{ g.equipos.length }}</ion-note>
+      </ion-list-header>
+      @for (e of g.equipos; track e.id) {
+        <app-tarjeta-equipo [equipo]="e" />
+      }
+    </ion-list>
+  } @empty {
+    <app-estado-vacio icono="construct-outline" titulo="Sin resultados"
+                      texto="No hay equipo que cumpla esos filtros.">
+      <ion-button fill="outline" (click)="limpiar()">Quitar filtros</ion-button>
+    </app-estado-vacio>
+  }
+
+  <ion-note class="aviso-precios">Precios orientativos. Consulta siempre las indicaciones del fabricante.</ion-note>
+</ion-content>

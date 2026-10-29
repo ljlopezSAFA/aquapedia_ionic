@@ -1,0 +1,13 @@
+<ion-item [routerLink]="['/app/equipo', equipo().id]" [button]="true" [detail]="true">
+  <app-miniatura slot="start" [icono]="icono" [tamano]="52" />
+  <ion-label>
+    <h3>
+      {{ equipo().nombre }}
+      @if (equipo().imprescindible) {
+        <ion-badge color="tertiary">Imprescindible</ion-badge>
+      }
+    </h3>
+    <p>{{ equipo().resumen }}</p>
+    <ion-note>{{ rangoLitros }} · {{ equipo().precio }}</ion-note>
+  </ion-label>
+</ion-item>

@@ -1,0 +1,238 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/especies"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Buscador</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="grupo" class="segmento">
+      @for (t of OP_TIPO; track t.valor) {
+        <ion-segment-button [value]="t.valor">
+          <ion-label>{{ t.texto }}</ion-label>
+        </ion-segment-button>
+      }
+    </ion-segment>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar placeholder="Nombre común, científico o familia" [(ngModel)]="busqueda" [debounce]="200"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Botón de filtros y orden -->
+  <div class="acciones">
+    <ion-button fill="outline" size="small" (click)="filtrosAbiertos = true">
+      <ion-icon slot="start" name="options-outline"></ion-icon>
+      Filtros
+      @if (filtrosActivos.length > 0) { ({{ filtrosActivos.length }}) }
+    </ion-button>
+
+    <ion-select class="orden" interface="popover" label="Ordenar por" labelPlacement="start" [(ngModel)]="orden">
+      @for (o of opcionesOrden; track o.valor) {
+        <ion-select-option [value]="o.valor">{{ o.texto }}</ion-select-option>
+      }
+    </ion-select>
+  </div>
+
+  <!-- Filtro rápido: el más usado de cada grupo -->
+  <div class="rapido">
+    @switch (grupo) {
+      @case ('PEZ') {
+        <app-selector-chips [desplazable]="true" [opciones]="OP_COMPORTAMIENTO" [(seleccion)]="filtros.comportamiento" />
+      }
+      @case ('PLANTA') {
+        <app-selector-chips [desplazable]="true" [opciones]="OP_ZONA_PLANTADO" [(seleccion)]="filtros.zonaPlantado" />
+      }
+      @case ('INVERTEBRADO') {
+        <app-selector-chips [desplazable]="true" [opciones]="OP_GRUPO_INVERTEBRADO" [(seleccion)]="filtros.grupoInvertebrado" />
+      }
+    }
+  </div>
+
+  <!-- Filtros aplicados -->
+  @if (filtrosActivos.length > 0) {
+    <div class="activos">
+      @for (f of filtrosActivos; track f.texto) {
+        <ion-chip class="activo" (click)="f.quitar()">
+          <ion-label>{{ f.texto }}</ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
+      }
+      <ion-button fill="clear" size="small" (click)="limpiar()">Limpiar todo</ion-button>
+    </div>
+  }
+
+  <ion-note class="contador">{{ resultados.length }} {{ nombreGrupo }}</ion-note>
+
+  <!-- Resultados -->
+  <div class="rejilla">
+    @for (e of resultados; track e.id; let i = $index) {
+      <app-tarjeta-especie class="entrada" [style.--orden]="i" [especie]="e" [detalle]="detalle(e)" />
+    } @empty {
+      <app-estado-vacio class="todo-el-ancho" icono="search-outline" titulo="Ninguna especie cumple los filtros"
+                        texto="Quita algún filtro o prueba con otro nombre.">
+        <ion-button fill="outline" (click)="limpiar()">Quitar todos los filtros</ion-button>
+      </app-estado-vacio>
+    }
+  </div>
+
+  <!-- ═══════════ Hoja de filtros ═══════════ -->
+  <ion-modal [isOpen]="filtrosAbiertos" (didDismiss)="filtrosAbiertos = false"
+             [initialBreakpoint]="0.9" [breakpoints]="[0, 0.6, 0.9, 1]">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Filtros · {{ nombreGrupo }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="limpiar()">Limpiar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <ion-accordion-group [multiple]="true" [value]="['general', 'grupo']">
+
+          <!-- ── General ─────────────────────── -->
+          <ion-accordion value="general">
+            <ion-item slot="header"><ion-label>General</ion-label></ion-item>
+            <div slot="content" class="seccion">
+
+              <ion-item lines="none" class="titulo-filtro"><ion-label>Dificultad</ion-label></ion-item>
+              <app-selector-chips [opciones]="OP_DIFICULTAD" [(seleccion)]="filtros.dificultad" />
+
+              <ion-item lines="none" class="titulo-filtro"><ion-label>Tipo de agua</ion-label></ion-item>
+              <app-selector-chips [opciones]="OP_AGUA" [(seleccion)]="filtros.agua" />
+
+              <ion-item lines="none" class="titulo-filtro"><ion-label>Origen</ion-label></ion-item>
+              <app-selector-chips [opciones]="opcionesOrigen" [(seleccion)]="filtros.origen" />
+
+              <ion-item lines="none" class="titulo-filtro">
+                <ion-label>Que viva a</ion-label>
+                <ion-note slot="end">{{ temperatura === null ? 'Cualquiera' : temperatura + ' °C' }}</ion-note>
+                @if (temperatura !== null) {
+                  <ion-button slot="end" fill="clear" size="small" (click)="temperatura = null">Quitar</ion-button>
+                }
+              </ion-item>
+              <ion-range [min]="16" [max]="32" [step]="1" [pin]="true" [snaps]="true" [ticks]="false"
+                         [(ngModel)]="temperatura" aria-label="Temperatura">
+                <ion-note slot="start">16°</ion-note>
+                <ion-note slot="end">32°</ion-note>
+              </ion-range>
+
+              <ion-item lines="none" class="titulo-filtro">
+                <ion-label>Mi pH</ion-label>
+                <ion-note slot="end">{{ ph === null ? 'Cualquiera' : ph.toFixed(1) }}</ion-note>
+                @if (ph !== null) {
+                  <ion-button slot="end" fill="clear" size="small" (click)="ph = null">Quitar</ion-button>
+                }
+              </ion-item>
+              <ion-range [min]="5" [max]="8.5" [step]="0.1" [(ngModel)]="ph" aria-label="pH">
+                <ion-note slot="start">5</ion-note>
+                <ion-note slot="end">8,5</ion-note>
+              </ion-range>
+            </div>
+          </ion-accordion>
+
+          <!-- ── Específicos del grupo ───────── -->
+          <ion-accordion value="grupo">
+            <ion-item slot="header"><ion-label>Solo {{ nombreGrupo }}</ion-label></ion-item>
+            <div slot="content" class="seccion">
+              @switch (grupo) {
+
+                @case ('PEZ') {
+                  <ion-item lines="none" class="titulo-filtro"><ion-label>Comportamiento</ion-label></ion-item>
+                  <app-selector-chips [opciones]="OP_COMPORTAMIENTO" [(seleccion)]="filtros.comportamiento" />
+
+                  <ion-item lines="none" class="titulo-filtro"><ion-label>Zona de nado</ion-label></ion-item>
+                  <app-selector-chips [opciones]="OP_ZONA_NADO" [(seleccion)]="filtros.zonaNado" />
+
+                  <ion-item lines="none" class="titulo-filtro"><ion-label>Alimentación</ion-label></ion-item>
+                  <app-selector-chips [opciones]="OP_DIETA" [(seleccion)]="filtros.dieta" />
+
+                  <ion-item class="campo-select">
+                    <ion-select label="Familia" [multiple]="true" interface="alert" placeholder="Todas"
+                                cancelText="Cancelar" okText="Aceptar" [(ngModel)]="filtros.familia">
+                      @for (o of opcionesFamilia; track o.valor) {
+                        <ion-select-option [value]="o.valor">{{ o.texto }}</ion-select-option>
+                      }
+                    </ion-select>
+                  </ion-item>
+
+                  <ion-item lines="none" class="titulo-filtro">
+                    <ion-label>Tamaño adulto</ion-label>
+                    <ion-note slot="end">{{ tamano.lower }}–{{ tamano.upper }} cm</ion-note>
+                  </ion-item>
+                  <ion-range [dualKnobs]="true" [min]="0" [max]="TAMANO_MAX" [step]="1" [pin]="true"
+                             [(ngModel)]="tamano" aria-label="Tamaño adulto">
+                    <ion-note slot="start">0</ion-note>
+                    <ion-note slot="end">{{ TAMANO_MAX }}</ion-note>
+                  </ion-range>
+
+                  <ion-item lines="none">
+                    <ion-toggle [(ngModel)]="soloCardumen">Solo especies que viven en grupo</ion-toggle>
+                  </ion-item>
+                }
+
+                @case ('PLANTA') {
+                  <ion-item lines="none" class="titulo-filtro"><ion-label>Tipo de planta</ion-label></ion-item>
+                  <app-selector-chips [opciones]="OP_TIPO_PLANTA" [(seleccion)]="filtros.tipoPlanta" />
+
+                  <ion-item lines="none" class="titulo-filtro"><ion-label>Zona del plantado</ion-label></ion-item>
+                  <app-selector-chips [opciones]="OP_ZONA_PLANTADO" [(seleccion)]="filtros.zonaPlantado" />
+
+                  <ion-item lines="none" class="titulo-filtro"><ion-label>Luz que necesita</ion-label></ion-item>
+                  <app-selector-chips [opciones]="OP_LUZ" [(seleccion)]="filtros.luz" />
+
+                  <ion-item lines="none" class="titulo-filtro"><ion-label>Crecimiento</ion-label></ion-item>
+                  <app-selector-chips [opciones]="OP_CRECIMIENTO" [(seleccion)]="filtros.crecimiento" />
+
+                  <ion-item lines="none">
+                    <ion-toggle [(ngModel)]="soloSinCo2">Solo plantas que no necesitan CO₂</ion-toggle>
+                  </ion-item>
+                }
+
+                @case ('INVERTEBRADO') {
+                  <ion-item lines="none" class="titulo-filtro"><ion-label>Grupo</ion-label></ion-item>
+                  <app-selector-chips [opciones]="OP_GRUPO_INVERTEBRADO" [(seleccion)]="filtros.grupoInvertebrado" />
+
+                  <ion-item lines="none">
+                    <ion-toggle [(ngModel)]="soloComeAlgas">Solo los que comen algas</ion-toggle>
+                  </ion-item>
+                }
+              }
+
+              <!-- Común a peces e invertebrados -->
+              @if (grupo !== 'PLANTA') {
+                <ion-item lines="none" class="titulo-filtro">
+                  <ion-label>Que quepa en mi acuario de</ion-label>
+                  <ion-note slot="end">{{ volumen === null ? 'Cualquiera' : volumen + ' L' }}</ion-note>
+                  @if (volumen !== null) {
+                    <ion-button slot="end" fill="clear" size="small" (click)="volumen = null">Quitar</ion-button>
+                  }
+                </ion-item>
+                <ion-range [min]="10" [max]="500" [step]="10" [pin]="true" [(ngModel)]="volumen" aria-label="Litros">
+                  <ion-note slot="start">10 L</ion-note>
+                  <ion-note slot="end">500 L</ion-note>
+                </ion-range>
+              }
+            </div>
+          </ion-accordion>
+
+        </ion-accordion-group>
+      </ion-content>
+
+      <ion-footer>
+        <ion-toolbar class="pie-modal">
+          <ion-button expand="block" (click)="filtrosAbiertos = false">
+            Ver {{ resultados.length }} {{ nombreGrupo }}
+          </ion-button>
+        </ion-toolbar>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

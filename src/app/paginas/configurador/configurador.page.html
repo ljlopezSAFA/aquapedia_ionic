@@ -1,0 +1,254 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/acuarios"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Configurador</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="lineas.length === 0" (click)="vaciar()" aria-label="Vaciar">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Configurador</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-note class="intro">Prueba combinaciones antes de comprar. Nada se guarda hasta que crees el acuario.</ion-note>
+
+  <!-- ═══════════ 1. El acuario ═══════════ -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Tu acuario</ion-card-subtitle>
+      <ion-card-title class="litros">{{ litros }} <ion-text color="medium">litros netos</ion-text></ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-range [min]="10" [max]="500" [step]="5" [(ngModel)]="litros" aria-label="Litros del acuario">
+        <ion-note slot="start">10</ion-note>
+        <ion-note slot="end">500</ion-note>
+      </ion-range>
+
+      <div class="presets">
+        @for (p of presets; track p) {
+          <ion-chip [class.marcado]="litros === p" (click)="litros = p">{{ p }} L</ion-chip>
+        }
+      </div>
+
+      <ion-segment [value]="agua" (ionChange)="cambiarAgua($event)">
+        @for (o of OP_AGUA; track o.valor) {
+          <ion-segment-button [value]="o.valor"><ion-label>{{ o.texto }}</ion-label></ion-segment-button>
+        }
+      </ion-segment>
+
+      <ion-item lines="none" class="item-co2">
+        <ion-toggle [(ngModel)]="conCo2">Tengo CO₂</ion-toggle>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- ═══════════ 2. Resultado ═══════════ -->
+  <ion-card>
+    <ion-card-header class="cabecera-resultado">
+      <ion-card-subtitle>Carga del acuario</ion-card-subtitle>
+      <ion-badge [color]="veredicto.color">
+        <ion-icon [name]="veredicto.icono"></ion-icon>{{ veredicto.texto }}
+      </ion-badge>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-text [color]="colorCarga"><h2 class="porcentaje">{{ porcentaje }} %</h2></ion-text>
+      <ion-progress-bar [value]="progreso" [color]="colorCarga"></ion-progress-bar>
+      <ion-note class="explicacion">
+        {{ cmOcupados }} de {{ cmMaximos }} cm de pez adulto · regla de 1 cm por litro. Las plantas no cuentan.
+      </ion-note>
+
+      <ion-grid class="rangos">
+        <ion-row>
+          <ion-col>
+            <ion-icon name="thermometer-outline" color="primary"></ion-icon>
+            @if (rangoTemperatura; as t) {
+              <ion-text [color]="t.min > t.max ? 'danger' : undefined">
+                <h3>{{ t.min > t.max ? 'Sin rango' : t.min + '–' + t.max + ' °C' }}</h3>
+              </ion-text>
+            } @else {
+              <ion-text><h3>—</h3></ion-text>
+            }
+            <ion-note>Temperatura común</ion-note>
+          </ion-col>
+          <ion-col>
+            <ion-icon name="flask-outline" color="primary"></ion-icon>
+            @if (rangoPh; as p) {
+              <ion-text [color]="p.min > p.max ? 'danger' : undefined">
+                <h3>{{ p.min > p.max ? 'Sin rango' : p.min + '–' + p.max }}</h3>
+              </ion-text>
+            } @else {
+              <ion-text><h3>—</h3></ion-text>
+            }
+            <ion-note>pH común</ion-note>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- ═══════════ 3. Habitantes ═══════════ -->
+  <ion-list [inset]="true">
+    <ion-list-header>
+      <ion-label>Habitantes</ion-label>
+      <ion-button (click)="selectorAbierto = true">Añadir</ion-button>
+    </ion-list-header>
+
+    @for (l of lineas; track l.especie.id) {
+      <ion-item-sliding>
+        <ion-item>
+          <app-miniatura slot="start" [foto]="l.especie.foto" [icono]="icono(l.especie)" [redonda]="true" [tamano]="44" />
+          <ion-label>
+            <h3>{{ l.especie.nombreComun }}</h3>
+            <p>{{ resumenLinea(l) }}</p>
+          </ion-label>
+          <div slot="end" class="contador">
+            <ion-button fill="clear" size="small" [disabled]="l.cantidad === 1" (click)="restar(l)" aria-label="Quitar uno">
+              <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-text class="cantidad">{{ l.cantidad }}</ion-text>
+            <ion-button fill="clear" size="small" (click)="sumar(l)" aria-label="Añadir uno">
+              <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="quitar(l)">Quitar</ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    } @empty {
+      <app-estado-vacio icono="fish-outline" titulo="Aún no hay especies"
+                        texto="Añade peces, plantas o invertebrados para evaluar tu acuario.">
+        <ion-button (click)="selectorAbierto = true">Añadir especie</ion-button>
+      </app-estado-vacio>
+    }
+  </ion-list>
+
+  <!-- ═══════════ 4. Revisión ═══════════ -->
+  @if (lineas.length > 0) {
+    <ion-list [inset]="true">
+      <ion-list-header><ion-label>Revisión</ion-label></ion-list-header>
+      @for (a of avisos; track a.texto) {
+        <ion-item>
+          <ion-icon slot="start" [name]="a.gravedad === 'ERROR' ? 'close-circle' : 'warning'"
+                    [color]="a.gravedad === 'ERROR' ? 'danger' : 'warning'"></ion-icon>
+          <ion-label class="ion-text-wrap">{{ a.texto }}</ion-label>
+        </ion-item>
+      } @empty {
+        <ion-item>
+          <ion-icon slot="start" name="checkmark-circle" color="success"></ion-icon>
+          <ion-label class="ion-text-wrap">Todo correcto: estas especies pueden convivir en {{ litros }} L.</ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  }
+
+  <!-- ═══════════ 5. Sugerencias ═══════════ -->
+  @if (sugerencias.length > 0) {
+    <ion-text class="titulo-grupo">Todavía encajan</ion-text>
+    <div class="sugerencias">
+      @for (e of sugerencias; track e.id) {
+        <ion-card class="sugerencia" [button]="true" (click)="anadir(e)">
+          <app-miniatura [foto]="e.foto" [icono]="icono(e)" [tamano]="120" />
+          <ion-card-header>
+            <ion-card-title>{{ e.nombreComun }}</ion-card-title>
+            <ion-card-subtitle>{{ e.tamanoCm ? e.tamanoCm + ' cm' : 'Planta' }}</ion-card-subtitle>
+          </ion-card-header>
+          @if (estadoCon(e) === 'PRECAUCION') {
+            <ion-badge color="warning" class="precaucion">Precaución</ion-badge>
+          }
+        </ion-card>
+      }
+    </div>
+  }
+
+  <!-- ═══════════ 6. Equipo recomendado ═══════════ -->
+  <ion-list [inset]="true">
+    <ion-list-header><ion-label>Equipo para {{ litros }} L</ion-label></ion-list-header>
+    <ion-item routerLink="/app/equipo" [queryParams]="{ categoria: 'FILTRO' }" [detail]="true">
+      <ion-icon slot="start" name="filter-outline" color="primary"></ion-icon>
+      <ion-label>
+        <h3>Filtro</h3>
+        <p>Caudal de al menos {{ caudalFiltro }} L/h (4 veces el volumen)</p>
+      </ion-label>
+    </ion-item>
+    <ion-item routerLink="/app/equipo" [queryParams]="{ categoria: 'CALENTADOR' }" [detail]="true">
+      <ion-icon slot="start" name="flame-outline" color="primary"></ion-icon>
+      <ion-label>
+        <h3>Calentador</h3>
+        <p>Unos {{ litros }} W (≈ 1 W por litro)</p>
+      </ion-label>
+    </ion-item>
+    <ion-item routerLink="/app/equipo" [queryParams]="{ categoria: 'ILUMINACION' }" [detail]="true">
+      <ion-icon slot="start" name="bulb-outline" color="primary"></ion-icon>
+      <ion-label>
+        <h3>Iluminación</h3>
+        <p>{{ necesitaLuzAlta ? 'LED regulable para plantado' : 'Pantalla LED básica' }}</p>
+      </ion-label>
+    </ion-item>
+    @if (necesitaLuzAlta && !conCo2) {
+      <ion-item routerLink="/app/equipo" [queryParams]="{ categoria: 'CO2' }" [detail]="true">
+        <ion-icon slot="start" name="cloud-outline" color="warning"></ion-icon>
+        <ion-label>
+          <h3>CO₂</h3>
+          <p>Alguna planta lo necesita</p>
+        </ion-label>
+      </ion-item>
+    }
+  </ion-list>
+
+  <div class="acciones">
+    <ion-button expand="block" [disabled]="lineas.length === 0 || noViable" routerLink="/app/acuarios/nuevo">
+      Crear acuario con esta configuración
+    </ion-button>
+    @if (noViable) {
+      <ion-note>Resuelve los errores en rojo para poder crearlo.</ion-note>
+    }
+  </div>
+
+  <!-- ═══════════ Hoja: añadir especie ═══════════ -->
+  <ion-modal [isOpen]="selectorAbierto" (didDismiss)="selectorAbierto = false"
+             [initialBreakpoint]="0.75" [breakpoints]="[0, 0.75, 1]">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Añadir especie</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="selectorAbierto = false">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <ion-toolbar>
+          <ion-searchbar placeholder="Buscar especie" [(ngModel)]="busqueda"></ion-searchbar>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          @for (e of disponibles; track e.id) {
+            <ion-item [button]="true" (click)="anadir(e)">
+              <app-miniatura slot="start" [foto]="e.foto" [icono]="icono(e)" [redonda]="true" [tamano]="44" />
+              <ion-label>
+                <h3>{{ e.nombreComun }}</h3>
+                <p>{{ resumenEspecie(e) }}</p>
+              </ion-label>
+              @switch (estadoCon(e)) {
+                @case ('INCOMPATIBLE') { <ion-badge slot="end" color="danger">Incompatible</ion-badge> }
+                @case ('PRECAUCION') { <ion-badge slot="end" color="warning">Precaución</ion-badge> }
+              }
+              <ion-icon slot="end" name="add-circle-outline" color="primary"></ion-icon>
+            </ion-item>
+          } @empty {
+            <app-estado-vacio icono="search-outline" titulo="No hay más especies"
+                              texto="Ya están todas o ninguna coincide con la búsqueda." />
+          }
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

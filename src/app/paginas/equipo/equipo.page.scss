@@ -1,0 +1,68 @@
+ion-note.intro {
+  display: block;
+  margin: -6px 20px 12px;
+  font-size: 14px;
+  --color: var(--app-texto-suave);
+}
+
+.categorias { padding: 8px 16px 4px; }
+
+ion-item.titulo-filtro {
+  --background: transparent;
+  --padding-start: 20px;
+  --inner-padding-end: 16px;
+  --min-height: 36px;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 700;
+
+  ion-note { font-size: 14px; font-weight: 700; --color: var(--ion-color-primary); }
+}
+
+ion-range.rango-litros { padding: 0 20px; }
+
+/* ── Imprescindibles (scroll horizontal) ─────────────────── */
+ion-text.titulo-grupo { display: block; }
+
+.imprescindibles {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 0 16px 8px;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+
+  ion-card {
+    flex: 0 0 140px;
+    margin: 0;
+    padding: 12px 12px 0;
+  }
+  ion-card-header { padding: 10px 0 12px; gap: 2px; }
+  ion-card-title { font-size: 14px; font-weight: 600; line-height: 1.25; --color: var(--ion-text-color); }
+  ion-card-subtitle {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
+    --color: var(--ion-color-primary);
+  }
+}
+
+/* ── Listado ─────────────────────────────────────────────── */
+ion-list-header {
+  gap: 8px;
+  font-family: var(--app-fuente-titulos);
+  font-size: 16px;
+  font-weight: 600;
+
+  ion-icon { font-size: 20px; }
+  ion-note { margin-inline-end: 16px; font-size: 13px; }
+}
+
+ion-note.aviso-precios {
+  display: block;
+  padding: 8px 20px 32px;
+  font-size: 12px;
+  text-align: center;
+  --color: var(--app-texto-suave);
+}

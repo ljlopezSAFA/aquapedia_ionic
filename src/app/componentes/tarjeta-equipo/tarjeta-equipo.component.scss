@@ -1,0 +1,27 @@
+:host { display: block; }
+
+ion-item { --padding-top: 8px; --padding-bottom: 8px; }
+
+app-miniatura { margin-inline-end: 14px; }
+
+ion-label {
+  white-space: normal;
+
+  h3 { font-family: var(--app-fuente-titulos); font-weight: 600; }
+  p  { margin: 2px 0 4px; }
+}
+
+ion-badge {
+  margin-inline-start: 6px;
+  font-size: 10px;
+  vertical-align: middle;
+}
+
+ion-note { font-size: 12px; --color: var(--ion-color-primary); font-weight: 700; }
+
+/* Cada fila va dentro de su propio componente, así que Ionic cree que todas son la última
+   y les quita la línea. La volvemos a poner a todas menos a la última de verdad. */
+:host(:not(:last-child)) ion-item {
+  --inner-border-width: 0 0 0.55px 0;
+  --border-color: var(--app-borde);
+}

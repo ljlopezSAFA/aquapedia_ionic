@@ -1,0 +1,26 @@
+ion-note.subtitulo {
+  display: block;
+  margin: -6px 20px 14px;
+  font-size: 15px;
+  --color: var(--app-texto-suave);
+}
+
+.contenido { padding: 0 16px 96px; }      /* espacio inferior para que el FAB no tape la última tarjeta */
+
+/* Tarjeta del configurador: con el degradado de la marca */
+ion-card.configurador {
+  margin: 0 0 16px;
+  --background: var(--app-degradado-marca);
+  background: var(--app-degradado-marca);
+
+  ion-card-header { padding: 16px 18px; gap: 4px; }
+  ion-icon { font-size: 26px; color: #5fd3e0; margin-bottom: 4px; }
+  ion-card-title { --color: #fff; font-size: 18px; font-weight: 700; }
+  ion-card-subtitle {
+    --color: rgba(255, 255, 255, .85);
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+}

@@ -1,0 +1,29 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Variante en una sola fila con scroll horizontal */
+:host(.desplazable) {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+ion-chip {
+  --background: var(--app-superficie);
+  --color: var(--ion-text-color);
+  margin: 0;
+  flex-shrink: 0;
+  border: 1px solid var(--app-borde);
+  font-weight: 700;
+  transition: background-color .2s, border-color .2s;
+}
+
+ion-chip.marcado {
+  --background: rgba(var(--ion-color-primary-rgb), .12);
+  --color: var(--ion-color-primary);
+  border-color: var(--ion-color-primary);
+}
