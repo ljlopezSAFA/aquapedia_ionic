@@ -11,6 +11,11 @@
       <ion-label>Acuarios</ion-label>
     </ion-tab-button>
 
+    <ion-tab-button tab="equipo">
+      <ion-icon [name]="pestanaActiva === 'equipo' ? 'construct' : 'construct-outline'"></ion-icon>
+      <ion-label>Equipo</ion-label>
+    </ion-tab-button>
+
     <ion-tab-button tab="salud">
       <ion-icon [name]="pestanaActiva === 'salud' ? 'pulse' : 'pulse-outline'"></ion-icon>
       <ion-label>Salud</ion-label>
